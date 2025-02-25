@@ -218,7 +218,7 @@ calcCOV=function(rfi,colList){
   }
   return(covList)
 }
-calcFancyDelta=function(i3_good,var,varDelta){
+calcFancyDelta=function(i3_good,var,varDelta,ratio=FALSE){
   newCol=which(names(i3_good)==var)[1]+1
   runList=i3_good$Plate
   experimentList=remove_ending_letter_vector(runList)
@@ -229,7 +229,11 @@ calcFancyDelta=function(i3_good,var,varDelta){
     i3_exp=i3_good[i3_good$Experiment==experiment,]
     exp_wt=i3_exp[i3_exp$Mutation=='WT',]
     wt_exp_mean=mean(exp_wt[,var],na.rm=TRUE)
-    i3_exp$delta=i3_exp[,var]-wt_exp_mean
+    if(!ratio){
+      i3_exp$delta=i3_exp[,var]-wt_exp_mean
+    } else{
+      i3_exp$delta=i3_exp[,var]/wt_exp_mean
+    }
     if(firsttime){
       i4=i3_exp
       firsttime=FALSE
